@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brew Trucks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Truck Schedule</h1>
+  <p>This table pulls data live from a public Google Sheet.</p>
+  <table id="data-table"></table>
 
+  <script>
+    const sheetId = 'e/2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/pubhtml'; // 👈 Replace with your real Sheet ID
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        const json = JSON.parse(data.substring(47).slice(0, -2));
+        const table = document.getElementById('data-table');
+
+        // Table headers
+        const headers = json.table.cols.map(col => col.label);
+        const headerRow = document.createElement('tr');
+        headers.forEach(header => {
+          const th = document.createElement('th');
+          th.textContent = header;
+          headerRow.appendChild(th);
+        });
+        table.appendChild(headerRow);
+
+        // Table rows
+        json.table.rows.forEach(row => {
+          const tr = document.createElement('tr');
+          row.c.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell ? cell.v : '';
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading Google Sheet data:', error);
+      });
+  </script>
+</body>
+</html>
