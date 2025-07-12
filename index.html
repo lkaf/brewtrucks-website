@@ -1,65 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
   <title>Brew Trucks</title>
+    <title>Food Truck Schedule at Colorado Breweries</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 960px;
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       padding: 20px;
     }
-    table {
-      border-collapse: collapse;
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    .buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 0 8px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    iframe {
       width: 100%;
-      margin-top: 20px;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
+    @media (max-width: 600px) {
+      iframe {
+        height: 400px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Truck Schedule</h1>
-  <p>Schedule for Golden Colorado </p>
-  <table id="data-table"></table>
+  <div class="container">
+    <h1>Brew Trucks Schedule</h1>
+    <div class="buttons">
+      <button onclick="switchTab('0')">    Golden    </button>
+      <button onclick="switchTab('1236773082')">    Arvada    </button>
+      <button onclick="switchTab('1856513098')">    Boulder   </button>
+    </div>
+    <iframe 
+      id="sheetFrame" 
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/pubhtml?gid=0&single=true&widget=true&headers=false"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </div>
 
   <script>
-    const url = 'https://docs.google.com/spreadsheets/d/2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/gviz/tq?tqx=out:json';
-    fetch(url)
-      .then(response => response.text())
-      .then(data => {
-        const json = JSON.parse(data.substring(47).slice(0, -2));
-        const table = document.getElementById('data-table');
-
-        // Table headers
-        const headers = json.table.cols.map(col => col.label);
-        const headerRow = document.createElement('tr');
-        headers.forEach(header => {
-          const th = document.createElement('th');
-          th.textContent = header;
-          headerRow.appendChild(th);
-        });
-        table.appendChild(headerRow);
-
-        // Table rows
-        json.table.rows.forEach(row => {
-          const tr = document.createElement('tr');
-          row.c.forEach(cell => {
-            const td = document.createElement('td');
-            td.textContent = cell ? cell.v : '';
-            tr.appendChild(td);
-          });
-          table.appendChild(tr);
-        });
-      })
-      .catch(error => {
-        console.error('Error loading Google Sheet data:', error);
-      });
+    function switchTab(gid) {
+      const iframe = document.getElementById('sheetFrame');
+      const baseUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/pubhtml';
+      iframe.src = `${baseUrl}?gid=${gid}&single=true&widget=true&headers=false`;
+    }
   </script>
 </body>
 </html>
