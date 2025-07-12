@@ -29,8 +29,8 @@
   <table id="data-table"></table>
 
   <script>
-    const sheetId = 'e/2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/pubhtml'; // 👈 Replace with your real Sheet ID
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+    const sheetId = '2PACX-1vQ3IzwYMso4FOihVDmyOk7dRh2qwrTwj7CEiKuw5pfBExyCFqSh2XNbpOkZlW2MHR7Wy_RBDYtV5azC/pubhtml?gid=0&single=true'; // 👈 Replace with your real Sheet ID
+    const url = `https://docs.google.com/spreadsheets/d/e/${sheetId}/gviz/tq?tqx=out:json`;
 
     fetch(url)
       .then(response => response.text())
